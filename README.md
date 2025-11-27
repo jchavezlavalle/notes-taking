@@ -6,7 +6,7 @@ Below you can find the main features of the application.
 # 🧠 What is notes-taking app? 
 Notes-taking app helps you manage your notes, allowing you to manage, organize and customize your notes. The app is built in React/NextJS and provides a very intuitive user interface to the user.
 
-# 🤝 Main features
+# 🤝 Requested features
 - **🔑 Login section:** Allows to log into the app and also to sign up for new users.
 - **🗒️ Notes management:** Allows to create, read and update notes.
 - **🗂️ Notes organization:** Allows to organize notes by categories. Each category owns a different color and name to be able to identify them.
