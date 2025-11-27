@@ -2,12 +2,13 @@
 
 import { useState, FormEvent } from "react";
 import { Note } from "../types/Note";
-import { randomUUID } from "crypto";
 import { config } from "../config";
 import { Category } from "../types/Category";
 import CategoryDropdown from "./CategoryDropdown";
 import { Inria_Serif } from "next/font/google";
 import moment from "moment";
+import { faker } from '@faker-js/faker';
+
 
 const inria = Inria_Serif({
   subsets: ["latin"],
@@ -17,9 +18,10 @@ const inria = Inria_Serif({
 interface Props {
   categories: Category[];
   onAdd: (note: Note) => void;
+  onCloseModal: () => void;
 }
 
-export default function NoteForm({ categories, onAdd }: Props) {
+export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState<number>(categories[0]?.id ?? 1);
@@ -27,10 +29,20 @@ export default function NoteForm({ categories, onAdd }: Props) {
   const selectedCategory = categories.find((c) => c.id === categoryId);
   const lastEdited = moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleCloseModal = () => {
+
+    console.log(title);
+    console.log(description);
+    if (title!==""&& description!==""){
+        //only if there is content we save the note, otherwise we close the modal
+        handleSubmit();
+    }
+    onCloseModal();
+  };
+
+  const handleSubmit = () => {
     const newNote: Note = {
-      id: randomUUID(),
+      id: faker.string.uuid(),
       title,
       description,
       createdAt: new Date().toISOString(),
@@ -46,6 +58,12 @@ export default function NoteForm({ categories, onAdd }: Props) {
   return (
     <div className="w-full h-screen p-10 flex flex-col">
       <div className="mb-4 w-64">
+      <button
+        onClick={() => handleCloseModal()}
+        className="absolute top-4 right-4 text-gray-600 hover:text-black"
+      >
+        ✕
+      </button>
         <CategoryDropdown
           categories={categories}
           categoryId={categoryId}

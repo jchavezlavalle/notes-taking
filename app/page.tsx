@@ -50,6 +50,10 @@ export default function Home() {
     setCategories(generated);
   }, []);
 
+  const onCloseModal = () => {
+    setIsModalOpen(false);
+  }
+
   const createNewNote = () => {
     setIsModalOpen(true);
   };
@@ -87,19 +91,13 @@ export default function Home() {
       {isModalOpen && (
   <div className="modal-background fixed inset-0 flex items-center justify-center z-50">
     <div className="p-10 w-full h-full shadow-xl relative">
-      
-      <button
-        onClick={() => setIsModalOpen(false)}
-        className="absolute top-4 right-4 text-gray-600 hover:text-black"
-      >
-        ✕
-      </button>
       <NoteForm 
       categories={categories}
         onAdd={(note) => {
           addNote(note);
           setIsModalOpen(false); // Close after creating
         }}
+        onCloseModal={onCloseModal}
       />
     </div>
   </div>
