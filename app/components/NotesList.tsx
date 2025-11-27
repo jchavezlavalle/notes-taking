@@ -27,7 +27,7 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
     }
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mr-10 mb-10">
         {notes.map((note: Note) => {
           const category = categories.find(c => c.id === note.categoryId);
           const dateStr = formatDate(note.createdAt);
@@ -37,7 +37,7 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
             <div
               key={note.id}
               style={{ backgroundColor: category && category.background, borderColor: category && category.color, borderWidth: 'medium' }}
-              className="w-[95%] h-[10%px] p-4 rounded-lg shadow transform hover:rotate-0 transition-transform relative overflow-hidden"
+              className="w-full p-4 rounded-lg shadow transform hover:rotate-0 transition-transform relative overflow-hidden"
             >
               <div className="flex items-center gap-2 mb-2">
                     <div className="font-bold text-normal">{dateStr}</div>
@@ -51,10 +51,11 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
                 {/*
                 <button
                   onClick={() => onDelete(note.id)}
-                  className="text-red-700 font-semibold hover:underline"
+                  className="text-red-700 font-semibold hover:underline absolute mb-2"
                 >
                   Delete
-                </button>*/}
+                </button>
+                */}
               </div>
             </div>
           );
