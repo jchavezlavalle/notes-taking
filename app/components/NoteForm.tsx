@@ -7,6 +7,7 @@ import { config } from "../config";
 import { Category } from "../types/Category";
 import CategoryDropdown from "./CategoryDropdown";
 import { Inria_Serif } from "next/font/google";
+import moment from "moment";
 
 const inria = Inria_Serif({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function NoteForm({ categories, onAdd }: Props) {
   const [categoryId, setCategoryId] = useState<number>(categories[0]?.id ?? 1);
 
   const selectedCategory = categories.find((c) => c.id === categoryId);
+  const lastEdited = moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa");
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +54,7 @@ export default function NoteForm({ categories, onAdd }: Props) {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex-1 flex flex-col p-8 rounded-lg shadow-lg"
+        className="flex-1 flex flex-col p-8 rounded-lg shadow-lg relative"
         style={{
           backgroundColor: selectedCategory?.background,
           borderColor: selectedCategory?.color,
@@ -60,6 +62,7 @@ export default function NoteForm({ categories, onAdd }: Props) {
           marginBottom:"50px"
         }}
       >
+        <div className="absolute top-4 right-4 text-black text-[12px]">{"Last Edited: "+lastEdited}</div>
         <input
           placeholder="Note title"
           value={title}
