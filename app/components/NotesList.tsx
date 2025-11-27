@@ -15,7 +15,7 @@ interface NotesListProps {
   notes: Note[];
   categories: Category[];
   selectedCategory: number;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function NotesList({ notes, categories, selectedCategory, onDelete }: NotesListProps) {

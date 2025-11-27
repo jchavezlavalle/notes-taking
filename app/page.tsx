@@ -58,7 +58,7 @@ export default function Home() {
     setNotes((prev) => [note, ...prev]);
   };
 
-  const deleteNote = (id: number) => {
+  const deleteNote = (id: string) => {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   };
 
@@ -95,6 +95,7 @@ export default function Home() {
         ✕
       </button>
       <NoteForm 
+      categories={categories}
         onAdd={(note) => {
           addNote(note);
           setIsModalOpen(false); // Close after creating
