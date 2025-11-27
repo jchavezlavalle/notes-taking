@@ -14,22 +14,32 @@ export default function CategoryDropdown({ categories, categoryId, setCategoryId
       <Listbox value={categoryId} onChange={setCategoryId}>
         <div className="relative">
   
-          <Listbox.Button style={{borderColor: "#957139",
-          width: "225px",
-          borderWidth: "2px"}} className="w-full border p-2 rounded flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: categories.find(c => c.id === categoryId)?.color }}
-              ></span>
-              {categories.find(c => c.id === categoryId)?.title}
-              <span className="material-symbols-outlined  border-elements">
+        <Listbox.Button
+  style={{
+    borderColor: "#957139",
+    width: "300px",
+    borderWidth: "1px",
+  }}
+  className="w-full border p-2 rounded flex items-center justify-between"
+>
+  <div className="flex items-center gap-2">
+    <span
+      className="w-3 h-3 rounded-full mr-4"
+      style={{ backgroundColor: categories.find(c => c.id === categoryId)?.color }}
+    ></span>
+
+    {categories.find(c => c.id === categoryId)?.title}
+  </div>
+
+  <span
+    style={{ fontSize: "32px" }}
+    className="material-symbols-outlined border-elements"
+  >
     keyboard_arrow_down
   </span>
-            </div>
-          </Listbox.Button>
+</Listbox.Button>
   
-          <Listbox.Options className="absolute w-full modal-background rounded shadow-md z-10">
+          <Listbox.Options style={{width:"300px"}} className="absolute w-full modal-background rounded z-10">
             {filteredCategories.map((cat) => (
               <Listbox.Option key={cat.id} value={cat.id}>
                 {({ selected }) => (
@@ -39,7 +49,7 @@ export default function CategoryDropdown({ categories, categoryId, setCategoryId
                     }`}
                   >
                     <span
-                      className="w-3 h-3 rounded-full"
+                      className="w-3 h-3 rounded-full mr-4"
                       style={{ backgroundColor: cat.color }}
                     ></span>
                     {cat.title}
