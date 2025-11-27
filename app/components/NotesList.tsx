@@ -14,12 +14,20 @@ const inria = Inria_Serif({
 interface NotesListProps {
   notes: Note[];
   categories: Category[];
+  selectedCategory: number;
   onDelete: (id: number) => void;
 }
 
-export default function NotesList({ notes, categories, onDelete }: NotesListProps) {
+export default function NotesList({ notes, categories, selectedCategory, onDelete }: NotesListProps) {
+
+    if (selectedCategory > 0){ //if I dont have anything selected, show all categories
+        notes = notes.filter((note) =>
+            note.categoryId === selectedCategory
+        );
+    }
+
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">
         {notes.map((note: Note) => {
           const category = categories.find(c => c.id === note.categoryId);
           const dateStr = formatDate(note.createdAt);

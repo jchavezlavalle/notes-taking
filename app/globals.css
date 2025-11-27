@@ -1,9 +1,13 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body{
-  background-color: #FAF1E3;
-  font-family: 'Inter';
+@layer base {
+  body {
+    background-color: #FAF1E3;
+  }
+
+  .modal-background {
+    background-color: #FAF1E3;
+  }
 }
