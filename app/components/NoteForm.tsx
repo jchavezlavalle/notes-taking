@@ -60,7 +60,8 @@ export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
       <div className="mb-4 w-64">
       <button
         onClick={() => handleCloseModal()}
-        className="absolute top-4 right-4 text-gray-600 hover:text-black"
+        style={{fontSize:"30px", color:"#957139"}}
+        className="absolute top-4 right-4 text-gray-600"
       >
         ✕
       </button>

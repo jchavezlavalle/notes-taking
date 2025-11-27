@@ -109,7 +109,7 @@ export default function Home() {
         </aside>
 
         {notes.length > 0 && (
-  <div className="flex justify-end items-start flex-1 relative">
+  <div className="flex items-start relative">
     <section
       className="
         overflow-auto
