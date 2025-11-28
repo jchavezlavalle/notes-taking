@@ -16,19 +16,29 @@ interface NotesListProps {
   categories: Category[];
   selectedCategory: number;
   onDelete: (id: string) => void;
+  onNoteSelected: (note: Note) => void;
 }
 
-export default function NotesList({ notes, categories, selectedCategory, onDelete }: NotesListProps) {
-
+export default function NotesList({ notes, categories, selectedCategory, onDelete, onNoteSelected }: NotesListProps) {
     if (selectedCategory > 0){ //if I dont have anything selected, show all categories
         notes = notes.filter((note) =>
             note.categoryId === selectedCategory
         );
     }
 
+    const onClickNote = (id: string) => {
+      //get note from notes
+      const noteSelected = notes.filter((note) =>
+        note.id === id
+      );
+      onNoteSelected(noteSelected[0]);
+    }
+
     return (
+      <>     
       <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 relative ml-40">
-        {notes.map((note: Note) => {
+        
+        {notes && notes.map((note: Note) => {
           const category = categories.find(c => c.id === note.categoryId);
           const dateStr = formatDate(note.createdAt);
   
@@ -38,6 +48,7 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
               key={note.id}
               style={{ backgroundColor: category && category.background, borderColor: category && category.color, borderWidth: 'medium' }}
               className="w-[350px] h-[350px] p-4 rounded-lg shadow transform hover:rotate-0 transition-transform overflow-hidden"
+              onClick={() => onClickNote(note.id)}
             >
               <div className="flex items-center gap-2 mb-2">
                     <div className="font-bold text-normal">{dateStr}</div>
@@ -61,6 +72,7 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
           );
         })}
       </div>
+      </>
     );
   }
 

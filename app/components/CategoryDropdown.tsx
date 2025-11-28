@@ -1,17 +1,27 @@
 import { Listbox } from "@headlessui/react";
 import { Category } from "../types/Category";
+import { Note } from "../types/Note";
 
 interface CategoryDropdownProps {
     categories: Category[];
     categoryId: number;
     setCategoryId: (id:number) => void;
+    selectedNote: Note|undefined;
 }
-export default function CategoryDropdown({ categories, categoryId, setCategoryId }: CategoryDropdownProps) {
-    
-    let filteredCategories = categories.filter((cat) => cat.id !== categoryId);
+export default function CategoryDropdown({ categories, categoryId, setCategoryId , selectedNote}: CategoryDropdownProps) {
+  
+  if (selectedNote){
+    categoryId = selectedNote.categoryId;
+  }
+  
+  let filteredCategories = categories.filter((cat) => cat.id !== categoryId);
+   
+  const onChangeDropdownOption = () => {
+    setCategoryId(categoryId);
+  }
 
     return (
-      <Listbox value={categoryId} onChange={setCategoryId}>
+      <Listbox value={categoryId} onChange={onChangeDropdownOption}>
         <div className="relative">
   
         <Listbox.Button

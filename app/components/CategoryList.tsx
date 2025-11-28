@@ -17,12 +17,13 @@ export default function CategoryList({ categories , onSelectedCategory}: Categor
     }
 
     const onSelectedAllCategories = () => {
+      setSelectedCategory(0);
       onSelectedCategory(0);
     }
 
     return (
       <div className="space-y-2">
-        <div className="font-bold text-[14px] cursor-pointer" onClick={() => onSelectedAllCategories()}>All categories</div>
+        <div className="font-bold text-[16px] cursor-pointer" onClick={() => onSelectedAllCategories()}>All categories</div>
         {categories.map((cat) => (
 
           <div

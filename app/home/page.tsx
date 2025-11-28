@@ -9,12 +9,14 @@ import generateDefaultCategories from "../utils/generateDummyData";
 import CategoryList from "../components/CategoryList";
 import "../globals.css";
 import { useRouter } from "next/navigation";
+import { config } from "../config";
 
 export default function Home() {
   const [categories,setCategories] = useState<Category[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<Note| undefined>();
   const router = useRouter();
 
   useEffect(() => {
@@ -57,7 +59,14 @@ export default function Home() {
     setCategories(generated);
   }, []);
 
+  const selectNote = (n: Note) => {
+    setSelectedNote(n);
+    setIsModalOpen(true);
+  }
+
   const onCloseModal = () => {
+    setSelectedCategory(0);
+    setSelectedNote(undefined);
     setIsModalOpen(false);
   }
 
@@ -69,6 +78,14 @@ export default function Home() {
     setNotes((prev) => [note, ...prev]);
   };
 
+  const editNote = (updatedNote: Note) => {
+    setNotes(prevNotes =>
+      prevNotes.map(n =>
+        n.id === updatedNote.id ? updatedNote : n
+      )
+    );
+  };
+
   const deleteNote = (id: string) => {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   };
@@ -76,6 +93,8 @@ export default function Home() {
   const onCategoryChange = (id: number)=> {
     setSelectedCategory(id);
   }
+
+  const emptyNotesDashboard = (!notes || notes.length === 0);
 
   return (
         <><button
@@ -99,10 +118,15 @@ export default function Home() {
   <div className="modal-background fixed inset-0 flex items-center justify-center z-50">
     <div className="p-10 w-full h-full shadow-xl relative">
       <NoteForm 
+      selectedNote={selectedNote}
       categories={categories}
         onAdd={(note) => {
           addNote(note);
           setIsModalOpen(false); // close the modal after creating note
+        }}
+        onEditNote = {(note) => {
+            editNote(note);
+            setIsModalOpen(false);
         }}
         onCloseModal={onCloseModal}
       />
@@ -115,6 +139,17 @@ export default function Home() {
           <CategoryList categories={categories} onSelectedCategory={onCategoryChange}/>
         </aside>
 
+        {emptyNotesDashboard && (
+            <div className={"flex flex-col items-center h-full m-auto"}>
+                <img 
+    src="/wait_coffee.png" 
+    alt="welcome back image"
+    className="w-300 h-300"
+  />
+  <div>{config.message_when_no_notes || "No notes found"}</div>
+  </div>
+        )}
+
         {notes.length > 0 && (
   <div className="flex items-start relative">
 <section className="flex-1 overflow-auto mt-20 pr-10">
@@ -124,6 +159,7 @@ export default function Home() {
       categories={categories}
       onDelete={deleteNote}
       selectedCategory={selectedCategory}
+      onNoteSelected={selectNote}
     />
   </div>
 </section>

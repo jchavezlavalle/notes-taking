@@ -8,6 +8,7 @@ import CategoryDropdown from "./CategoryDropdown";
 import { Inria_Serif } from "next/font/google";
 import moment from "moment";
 import { faker } from '@faker-js/faker';
+import { useEffect } from "react";
 
 
 const inria = Inria_Serif({
@@ -16,24 +17,37 @@ const inria = Inria_Serif({
 });
 
 interface Props {
+  selectedNote: Note|undefined;
   categories: Category[];
   onAdd: (note: Note) => void;
   onCloseModal: () => void;
+  onEditNote: (note: Note) => void;
 }
 
-export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
+export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal, onEditNote }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState<number>(categories[0]?.id ?? 1);
+  const [lastEdited, setLastEdited] = useState(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"));
 
   const selectedCategory = categories.find((c) => c.id === categoryId);
-  const lastEdited = moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa");
+  const categoryFromSelectedNote = categories.find((c)=> c.id === selectedNote?.categoryId);
+
+  useEffect(() => {
+    if (selectedNote) {
+      setTitle(selectedNote.title);
+      setDescription(selectedNote.description);
+      setCategoryId(selectedNote.categoryId);
+    } else {
+      // reset when creating a new note
+      setTitle("");
+      setDescription("");
+      setCategoryId(categories[0]?.id ?? 1);
+    }
+  }, [selectedNote]);
 
   const handleCloseModal = () => {
-
-    console.log(title);
-    console.log(description);
-    if (title!==""&& description!==""){
+    if (title!=="" && description!==""){
         //only if there is content we save the note, otherwise we close the modal
         handleSubmit();
     }
@@ -41,18 +55,35 @@ export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
   };
 
   const handleSubmit = () => {
-    const newNote: Note = {
-      id: faker.string.uuid(),
-      title,
-      description,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      categoryId: categoryId ?? config.default_category,
-    };
-    onAdd(newNote);
+    //to know if it is an edit or a create (submit) we need to check if selectedNote has a value
+
+    if (!selectedNote){
+      const newNote: Note = {
+        id: faker.string.uuid(),
+        title,
+        description,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        categoryId: categoryId ?? config.default_category,
+      };
+      onAdd(newNote);
+    } else {
+      const editNote = {
+        id: selectedNote.id,
+        title,
+        description,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        categoryId: selectedNote.categoryId || 1,
+      };
+      onEditNote(editNote);
+    }
+    
+    //This is to reset for next time
     setTitle("");
     setDescription("");
     setCategoryId(categories[0]?.id ?? 1);
+    setLastEdited(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"));
   };
 
   return (
@@ -69,6 +100,7 @@ export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
           categories={categories}
           categoryId={categoryId}
           setCategoryId={setCategoryId}
+          selectedNote={selectedNote}
         />
       </div>
       <form
@@ -82,18 +114,19 @@ export default function NoteForm({ categories, onAdd, onCloseModal }: Props) {
         }}
       >
         <div className="absolute top-4 right-4 text-black text-[12px]">{"Last Edited: "+lastEdited}</div>
+
         <input
-          placeholder="Note title"
+          placeholder="Note Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {setTitle(e.target.value); setLastEdited(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"))}}
           required
           className={`${inria.className} font-bold text-[24px] bg-transparent outline-none mb-4 w-full placeholder-black`}
         />
 
         <textarea
-          placeholder="Note content"
+          placeholder="Pour your heart out..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {setDescription(e.target.value); setLastEdited(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"))}}
           className="flex-1 bg-transparent outline-none w-full resize-none text-[16px] placeholder-black"
         />
       </form>
