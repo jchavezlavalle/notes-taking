@@ -16,14 +16,18 @@ export default function CategoryList({ categories , onSelectedCategory}: Categor
         setSelectedCategory(id);
     }
 
+    const onSelectedAllCategories = () => {
+      onSelectedCategory(0);
+    }
+
     return (
       <div className="space-y-2">
-        <div className="font-bold text-normal">All categories</div>
+        <div className="font-bold text-[14px] cursor-pointer" onClick={() => onSelectedAllCategories()}>All categories</div>
         {categories.map((cat) => (
 
           <div
             key={cat.id}
-            className="flex justify-between rounded-lg transition"
+            className="flex justify-between rounded-lg transition cursor-pointer"
             onClick={() => onSelectedCategory(cat.id)}
           >
             
@@ -32,8 +36,8 @@ export default function CategoryList({ categories , onSelectedCategory}: Categor
               className="w-4 h-4 rounded-full"
               style={{ backgroundColor: cat.color }}
             ></span>
-                <span onClick={() => onClickedCategory(cat.id)} className={`text-normal ${
-            selectedCategory === cat.id ? "font-bold" : "font-normal"
+                <span onClick={() => onClickedCategory(cat.id)} className={`font-[12px] ${
+            selectedCategory === cat.id ? "font-bold" : "font-[12px]"
           }`}>{cat.title}</span>
             </div>
 

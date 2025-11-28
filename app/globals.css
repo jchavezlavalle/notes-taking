@@ -12,8 +12,15 @@
   }
 
   .border-elements {
-    color: #957139;
+    color: #88642A;
   }
+}
+.welcome-text {
+  color: #88642A;
+  font-size: 48px;
+}
+.welcome-cat {
+  margin-bottom: -14px;
 }
 
 .material-symbols-outlined {
