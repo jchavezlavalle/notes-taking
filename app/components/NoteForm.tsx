@@ -74,7 +74,7 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
         description,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        categoryId: selectedNote.categoryId || 1,
+        categoryId: selectedCategory?.id || config.default_category,
       };
       onEditNote(editNote);
     }
