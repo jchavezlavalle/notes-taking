@@ -7,7 +7,7 @@ import { Note } from "../types/Note";
 import {Category} from "../types/Category";
 import generateDefaultCategories from "../utils/generateDummyData";
 import CategoryList from "../components/CategoryList";
-import "./globals.css";
+import "../globals.css";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -102,7 +102,7 @@ export default function Home() {
       categories={categories}
         onAdd={(note) => {
           addNote(note);
-          setIsModalOpen(false); // Close after creating
+          setIsModalOpen(false); // close the modal after creating note
         }}
         onCloseModal={onCloseModal}
       />
