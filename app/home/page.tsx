@@ -10,6 +10,7 @@ import CategoryList from "../components/CategoryList";
 import "../globals.css";
 import { useRouter } from "next/navigation";
 import { config } from "../config";
+import { getAllCategoriesAPI } from "../services/categoriesApi";
 
 export default function Home() {
   const [categories,setCategories] = useState<Category[]>([]);
@@ -42,21 +43,28 @@ export default function Home() {
   }, [notes]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("categories");
+    async function loadCategories() {
+      const saved = localStorage.getItem("categories");
   
-    if (saved) {
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setCategories(parsed);
+        } catch {
+          console.error("Invalid localStorage categories");
+        }
+      }
+  
       try {
-        const parsed = JSON.parse(saved);
-        setCategories(parsed);
-        return; 
+        const data = await getAllCategoriesAPI();
+        setCategories(data);
+        localStorage.setItem("categories", JSON.stringify(data));
       } catch (e) {
-        console.error("Stored categories invalid:", e);
+        console.error("Failed to fetch categories from backend", e);
       }
     }
   
-    const generated = generateDefaultCategories();
-    localStorage.setItem("categories", JSON.stringify(generated));
-    setCategories(generated);
+    loadCategories();
   }, []);
 
   const selectNote = (n: Note) => {

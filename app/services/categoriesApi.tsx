@@ -5,7 +5,7 @@ export async function getAllCategoriesAPI() {
       headers: { "Content-Type": "application/json" },
     });
   
-    if (!res.ok) throw new Error("Failed to create note");
+    if (!res.ok) throw new Error("Failed to get categories");
     return res.json();
   }
 
@@ -15,6 +15,6 @@ export async function getAllCategoriesAPI() {
       headers: { "Content-Type": "application/json" },
     });
   
-    if (!res.ok) throw new Error("Failed to update note");
+    if (!res.ok) throw new Error("Failed to get category by id");
     return res.json();
   }
