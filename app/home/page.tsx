@@ -146,7 +146,7 @@ export default function Home() {
     alt="welcome back image"
     className="w-300 h-300"
   />
-  <div>{config.message_when_no_notes || "No notes found"}</div>
+  <div style={{color: "#88642A", fontSize: "20px"}}>{config.message_when_no_notes || "No notes found"}</div>
   </div>
         )}
 

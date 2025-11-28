@@ -9,6 +9,7 @@ import { Inria_Serif } from "next/font/google";
 import moment from "moment";
 import { faker } from '@faker-js/faker';
 import { useEffect } from "react";
+import { createNoteAPI, updateNoteAPI } from "../services/notesApi";
 
 
 const inria = Inria_Serif({
@@ -38,11 +39,19 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
       setTitle(selectedNote.title);
       setDescription(selectedNote.description);
       setCategoryId(selectedNote.categoryId);
+      setLastEdited(
+        moment(selectedNote.updatedAt).format("MMMM DD, YYYY") +
+        " at " +
+        moment(selectedNote.updatedAt).format("HH:MMa")
+      );
     } else {
       // reset when creating a new note
       setTitle("");
       setDescription("");
       setCategoryId(categories[0]?.id ?? 1);
+      setLastEdited(
+        moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa")
+      );
     }
   }, [selectedNote]);
 
@@ -54,7 +63,7 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
     onCloseModal();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     //to know if it is an edit or a create (submit) we need to check if selectedNote has a value
 
     if (!selectedNote){
@@ -66,17 +75,19 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
         updatedAt: new Date().toISOString(),
         categoryId: categoryId ?? config.default_category,
       };
+      await createNoteAPI(newNote);
       onAdd(newNote);
     } else {
       const editNote = {
         id: selectedNote.id,
         title,
         description,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: selectedNote.createdAt,
+        updatedAt: selectedNote.updatedAt,
         categoryId: selectedCategory?.id || config.default_category,
       };
       onEditNote(editNote);
+      await updateNoteAPI(editNote);
     }
     
     //This is to reset for next time
