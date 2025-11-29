@@ -33,6 +33,9 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
 
   const selectedCategory = categories.find((c) => c.id == categoryId);
 
+
+  console.log("in note form", selectedNote);
+
   useEffect(() => {
 
     if (selectedNote) {

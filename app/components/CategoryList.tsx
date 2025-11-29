@@ -3,13 +3,15 @@
 import React from "react";
 import { useState } from "react";
 import { Category } from "../types/Category";
+import { NotesCount } from "../types/NotesCount";
 
 interface CategoryListProps {
   categories: Category[];
+  notesCount: NotesCount[];
   onSelectedCategory: (id: number) => void;
 }
 
-export default function CategoryList({ categories , onSelectedCategory}: CategoryListProps) {
+export default function CategoryList({ categories , notesCount,  onSelectedCategory}: CategoryListProps) {
     const [selectedCategory, setSelectedCategory] = useState<number>(0);
     
     const onClickedCategory = (id: number) => {
@@ -19,6 +21,10 @@ export default function CategoryList({ categories , onSelectedCategory}: Categor
     const onSelectedAllCategories = () => {
       setSelectedCategory(0);
       onSelectedCategory(0);
+    }
+
+    const getCountNotes = (idCategory: any) => {
+      return notesCount.find((nc) => nc.categoryId == idCategory)?.countNotes;
     }
 
     return (
@@ -42,7 +48,7 @@ export default function CategoryList({ categories , onSelectedCategory}: Categor
           }`}>{cat.title}</span>
             </div>
 
-            <span className="font-normal text-normal">{1}</span>
+            <span className="font-normal text-normal">{getCountNotes(cat.id)}</span>
           </div>
         ))}
       </div>

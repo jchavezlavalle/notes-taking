@@ -18,3 +18,13 @@ export async function getAllCategoriesAPI() {
     if (!res.ok) throw new Error("Failed to get category by id");
     return res.json();
   }
+
+  export async function getNotesCountFromCategories() {
+    const res = await fetch(`http://localhost:8000/api/categories/countNotes/`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+  
+    if (!res.ok) throw new Error("Failed to get count of notes");
+    return res.json();
+  }

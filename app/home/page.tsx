@@ -10,8 +10,9 @@ import CategoryList from "../components/CategoryList";
 import "../globals.css";
 import { useRouter } from "next/navigation";
 import { config } from "../config";
-import { getAllCategoriesAPI } from "../services/categoriesApi";
+import { getAllCategoriesAPI, getNotesCountFromCategories } from "../services/categoriesApi";
 import { getAllNotes } from "../services/notesApi";
+import { NotesCount } from "../types/NotesCount";
 
 export default function Home() {
   const [categories,setCategories] = useState<Category[]>([]);
@@ -19,6 +20,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note| undefined>();
+  const [notesCount, setNotesCount] = useState<NotesCount[]>([]);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +31,20 @@ export default function Home() {
     }
   }, []);
 
-  // To load all notes
+  useEffect(() => {
+    async function loadNotesCount() {
+      try {
+        const data = await getNotesCountFromCategories();
+        setNotesCount(data.data);
+        localStorage.setItem("countNotes", JSON.stringify(data.data));
+      } catch (e) {
+        console.error("Failed to fetch notes from backend", e);
+      }
+    }
+    loadNotesCount();
+  }, []);
+
+
   useEffect(() => {
     async function loadNotes() {
       const saved = localStorage.getItem("notes");
@@ -54,7 +70,6 @@ export default function Home() {
     loadNotes();
   }, []);
 
-  //To load all categories
   useEffect(() => {
     async function loadCategories() {
       const saved = localStorage.getItem("categories");
@@ -157,7 +172,7 @@ export default function Home() {
     <br/><br/>
   <main className="flex h-screen">
         <aside className="w-[300px] p-10">
-          <CategoryList categories={categories} onSelectedCategory={onCategoryChange}/>
+          <CategoryList categories={categories} notesCount={notesCount} onSelectedCategory={onCategoryChange}/>
         </aside>
 
         {emptyNotesDashboard && (

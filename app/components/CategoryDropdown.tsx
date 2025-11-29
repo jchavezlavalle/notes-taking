@@ -13,6 +13,7 @@ export default function CategoryDropdown({
   categories,
   categoryId,
   setCategoryId,
+  selectedNote
 }: Props) {
   
   // Filter all except currently selected
@@ -35,11 +36,11 @@ export default function CategoryDropdown({
               className="w-3 h-3 rounded-full mr-4"
               style={{
                 backgroundColor:
-                  categories.find((c) => c.id === categoryId)?.color,
+                  categories.find((c) => c.id == categoryId)?.color,
               }}
             ></span>
 
-            {categories.find((c) => c.id === categoryId)?.title}
+            {categories.find((c) => c.id == categoryId)?.title}
           </div>
 
           <span
