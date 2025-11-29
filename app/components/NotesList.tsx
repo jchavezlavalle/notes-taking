@@ -20,13 +20,10 @@ interface NotesListProps {
 }
 
 export default function NotesList({ notes, categories, selectedCategory, onDelete, onNoteSelected }: NotesListProps) {
-    
-  console.log(notes);
-  console.log(categories);
 
   if (selectedCategory > 0){ //if I dont have anything selected, show all categories
         notes = notes.filter((note) =>
-            note.categoryId === selectedCategory
+            note.categoryId == selectedCategory
         );
     }
 
@@ -45,7 +42,6 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
         {notes && notes.map((note: Note) => {
           const category = categories.find(c => c.id == note.categoryId);
           const dateStr = formatDate(note.createdAt);
-          console.log(category);
 
           return (
             

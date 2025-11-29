@@ -31,10 +31,10 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
   const [categoryId, setCategoryId] = useState<number>(categories[0]?.id ?? 1);
   const [lastEdited, setLastEdited] = useState(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"));
 
-  const selectedCategory = categories.find((c) => c.id === categoryId);
-  const categoryFromSelectedNote = categories.find((c)=> c.id === selectedNote?.categoryId);
+  const selectedCategory = categories.find((c) => c.id == categoryId);
 
   useEffect(() => {
+
     if (selectedNote) {
       setTitle(selectedNote.title);
       setDescription(selectedNote.description);
