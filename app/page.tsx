@@ -5,6 +5,10 @@ import { useState } from "react";
 import { config } from "./config";
 import { Inria_Serif } from "next/font/google";
 import Link from "next/link";
+import { User } from "./types/User";
+import SuccessModal from "./components/SuccessModal";
+import { faker } from '@faker-js/faker';
+import { createUserAPI, getUserByEmailAPI } from "./services/usersApi";
 
 const inria = Inria_Serif({
   subsets: ["latin"],
@@ -13,6 +17,8 @@ const inria = Inria_Serif({
 
 export default function LoginPage() {
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,8 +34,48 @@ export default function LoginPage() {
     }
   };
 
+  const createNewUser = async (user: User) => {
+    try{
+      await createUserAPI(user);
+      setShowModal(true);
+    } catch (e) {
+      console.error("Failed to fetch notes count", e);
+    }
+  }
+
+  const handleSignUp = async (email: string, password: string) => {
+    
+    let exists = false;
+
+    try{
+      const data = await getUserByEmailAPI(email);
+      exists = (data!== null);  
+    } catch (e) {
+      console.error("Failed to fetch notes count", e);
+    }
+
+    if (!exists){
+      createNewUser({
+        email: email, password: password,
+        id: faker.string.uuid()
+      });  
+    } else {
+      setShowErrorModal(true);
+    }    
+  }
+
   return (
     <div className="w-screen h-screen flex items-center justify-center">
+
+      {showModal && <SuccessModal
+          message="You have been registered successfully!"
+          onClose={() => setShowModal(false)}
+        />}
+      {showErrorModal && <SuccessModal
+          message="You already have an account, please sign in."
+          onClose={() => setShowErrorModal(false)}
+        />}
+
       <form
         onSubmit={handleLogin}
         className="flex flex-col gap-4 w-800"
@@ -89,6 +135,7 @@ export default function LoginPage() {
 
         <button
           type="submit"
+          onClick={() => handleSignUp(email, password)}
           style={{borderWidth:"1px", borderColor: "#957139"}}
           className="p-2 mt-6 rounded border-elements border rounded-l-full rounded-r-full font-bold w-[380px]"
         >

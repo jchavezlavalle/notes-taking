@@ -5,6 +5,7 @@ import { useState } from "react";
 import { config } from "../config";
 import { Inria_Serif } from "next/font/google";
 import Link from "next/link";
+import { getUserByEmailAPI } from "../services/usersApi";
 
 const inria = Inria_Serif({
   subsets: ["latin"],
@@ -17,10 +18,18 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (email: string) => {
 
-    if (email === "test@test.com" && password === "1234") {
+    let exists = false;
+
+    try{
+      const data = await getUserByEmailAPI(email);
+      exists = (data!== null);  
+    } catch (e) {
+      console.error("Failed to fetch notes count", e);
+    }
+
+    if (exists) {
       localStorage.setItem("loggedIn", "true");
       router.push("/home");
     } else {
@@ -31,7 +40,6 @@ export default function SignInPage() {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <form
-        onSubmit={handleLogin}
         className="flex flex-col gap-4 w-800"
       >
         <img 
@@ -89,6 +97,7 @@ export default function SignInPage() {
 
         <button
           type="submit"
+          onClick={() => handleLogin(email)}
           style={{borderWidth:"1px", borderColor: "#957139"}}
           className="p-2 mt-6 rounded border-elements border rounded-l-full rounded-r-full font-bold w-[380px]"
         >
