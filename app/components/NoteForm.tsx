@@ -10,6 +10,8 @@ import moment from "moment";
 import { faker } from '@faker-js/faker';
 import { useEffect } from "react";
 import { createNoteAPI, updateNoteAPI } from "../services/notesApi";
+import { getNotesCountFromCategories } from "../services/categoriesApi";
+import { NotesCount } from "../types/NotesCount";
 
 
 const inria = Inria_Serif({
@@ -23,18 +25,16 @@ interface Props {
   onAdd: (note: Note) => void;
   onCloseModal: () => void;
   onEditNote: (note: Note) => void;
+  updateNotesCount: (nc: NotesCount[]) => void;
 }
 
-export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal, onEditNote }: Props) {
+export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal, onEditNote, updateNotesCount}: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState<number>(categories[0]?.id ?? 1);
   const [lastEdited, setLastEdited] = useState(moment().format("MMMM DD, YYYY") + " at " + moment().format("HH:MMa"));
 
   const selectedCategory = categories.find((c) => c.id == categoryId);
-
-
-  console.log("in note form", selectedNote);
 
   useEffect(() => {
 
@@ -58,7 +58,7 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
     }
   }, [selectedNote]);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     if (title!=="" && description!==""){
         //only if there is content we save the note, otherwise we close the modal
         handleSubmit();
@@ -78,8 +78,19 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
         updatedAt: new Date().toISOString(),
         categoryId: categoryId ?? config.default_category,
       };
-      await createNoteAPI(newNote);
+      await createNoteAPI(newNote).then(async () => {
+        console.log("ended creating note");
+        try {
+          const data = await getNotesCountFromCategories();
+          updateNotesCount(data.data);
+        } catch (e) {
+          console.error("Failed to fetch notes count", e);
+        }
+
+      });
+
       onAdd(newNote);
+
     } else {
       const editNote = {
         id: selectedNote.id,
@@ -90,7 +101,17 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
         categoryId: selectedCategory?.id || config.default_category,
       };
       onEditNote(editNote);
-      await updateNoteAPI(editNote);
+
+      await updateNoteAPI(editNote).then(async () => {
+        console.log("ended updating note");
+        try {
+          const data = await getNotesCountFromCategories();
+          updateNotesCount(data.data);
+        } catch (e) {
+          console.error("Failed to fetch notes count", e);
+        }
+
+      });
     }
     
     //This is to reset for next time

@@ -32,7 +32,6 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
       const noteSelected = notes.filter((note) =>
         note.id === id
       );
-      console.log(noteSelected[0]);
       onNoteSelected(noteSelected[0]);
     }
 

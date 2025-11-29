@@ -36,7 +36,6 @@ export default function Home() {
       try {
         const data = await getNotesCountFromCategories();
         setNotesCount(data.data);
-        localStorage.setItem("countNotes", JSON.stringify(data.data));
       } catch (e) {
         console.error("Failed to fetch notes from backend", e);
       }
@@ -100,7 +99,7 @@ export default function Home() {
     setIsModalOpen(true);
   }
 
-  const onCloseModal = () => {
+  const onCloseModal = async () => {
     setSelectedCategory(0);
     setSelectedNote(undefined);
     setIsModalOpen(false);
@@ -110,11 +109,11 @@ export default function Home() {
     setIsModalOpen(true);
   };
 
-  const addNote = (note: Note) => {
+  const addNote = async (note: Note) => {
     setNotes((prev) => [note, ...prev]);
   };
 
-  const editNote = (updatedNote: Note) => {
+  const editNote = async (updatedNote: Note) => {
     setNotes(prevNotes =>
       prevNotes.map(n =>
         n.id === updatedNote.id ? updatedNote : n
@@ -156,6 +155,7 @@ export default function Home() {
       <NoteForm 
       selectedNote={selectedNote}
       categories={categories}
+      updateNotesCount={setNotesCount}
         onAdd={(note) => {
           addNote(note);
           setIsModalOpen(false); // close the modal after creating note
@@ -172,7 +172,10 @@ export default function Home() {
     <br/><br/>
   <main className="flex h-screen">
         <aside className="w-[300px] p-10">
-          <CategoryList categories={categories} notesCount={notesCount} onSelectedCategory={onCategoryChange}/>
+          <CategoryList categories={categories}
+           notesCount={notesCount} 
+           onSelectedCategory={onCategoryChange}
+           selectedCategory={selectedCategory}/>
         </aside>
 
         {emptyNotesDashboard && (
