@@ -60,14 +60,6 @@ export default function NotesList({ notes, categories, selectedCategory, onDelet
   
               <div className="mt-3 flex items-center justify-between">
                 
-                {/*
-                <button
-                  onClick={() => onDelete(note.id)}
-                  className="text-red-700 font-semibold hover:underline absolute mb-2"
-                >
-                  Delete
-                </button>
-                */}
               </div>
             </div>
           );
