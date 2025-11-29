@@ -30,4 +30,4 @@ npm run test
 At the moment there is only one example test for the success modal window but this can be taken as an example to develop future tests for all the components throughout the app.
 
 # 🤖 AI Use
-For speeding up the process I have used Claude and/or ChatGPT to search for doubts regarding on how to setup the test configuration. Also I have used it to clear up doubts on styling with tailwind.
+For speeding up the process I have used Cursor and/or ChatGPT to search for doubts regarding on how to setup the test configuration. Also I have used it to clear up doubts on styling with tailwind.
