@@ -79,7 +79,6 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
         categoryId: categoryId ?? config.default_category,
       };
       await createNoteAPI(newNote).then(async () => {
-        console.log("ended creating note");
         try {
           const data = await getNotesCountFromCategories();
           updateNotesCount(data.data);
@@ -103,7 +102,6 @@ export default function NoteForm({ selectedNote, categories, onAdd, onCloseModal
       onEditNote(editNote);
 
       await updateNoteAPI(editNote).then(async () => {
-        console.log("ended updating note");
         try {
           const data = await getNotesCountFromCategories();
           updateNotesCount(data.data);
