@@ -11,6 +11,7 @@ import "../globals.css";
 import { useRouter } from "next/navigation";
 import { config } from "../config";
 import { getAllCategoriesAPI } from "../services/categoriesApi";
+import { getAllNotes } from "../services/notesApi";
 
 export default function Home() {
   const [categories,setCategories] = useState<Category[]>([]);
@@ -27,21 +28,33 @@ export default function Home() {
     }
   }, []);
 
+  // To load all notes
   useEffect(() => {
-    const savedNotes = localStorage.getItem("notes");
-    if (savedNotes) {
-      try {
-        setNotes(JSON.parse(savedNotes));
-      } catch {
-        console.error("Invalid localStorage data for saved notes");
+    async function loadNotes() {
+      const saved = localStorage.getItem("notes");
+  
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setNotes(parsed);
+        } catch {
+          console.error("Invalid localStorage notes");
+        }
       }
-    }   
+  
+      try {
+        const data = await getAllNotes();
+        setNotes(data);
+        localStorage.setItem("notes", JSON.stringify(data));
+      } catch (e) {
+        console.error("Failed to fetch notes from backend", e);
+      }
+    }
+  
+    loadNotes();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
-
+  //To load all categories
   useEffect(() => {
     async function loadCategories() {
       const saved = localStorage.getItem("categories");

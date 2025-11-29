@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { Note } from "../types/Note";
 import { config } from "../config";
 import { Category } from "../types/Category";
