@@ -7,13 +7,10 @@ Below you can find the main features of the application.
 Notes-taking app helps you manage your notes, allowing you to manage, organize and customize your notes. The app is built in React/NextJS and provides a very intuitive user interface to the user.
 
 # 🤝 Requested features
-- **🔑 Login section:** Allows to log into the app and also to sign up for new users.
-- **🗒️ Notes management:** Allows to create, read and update notes.
-- **🗂️ Notes organization:** Allows to organize notes by categories. Each category owns a different color and name to be able to identify them.
+- **🔑 Login section:** Allows to log in into the app.
+- **🔑 Sign up section:** Users can sign up if they are new to the app.
+- **🗒️ Notes management:** Allows users to create, read and update notes. Users can change the notes content and the category related.
+- **🗂️ Notes organization:** Allows to organize notes by categories. Each category owns a different color and name to be able to identify them. When a user clicks over one category on the list, just the notes that belong to that category are shown. Also, users can see the number of notes related to each category.
 
-# 🚀 Enhancements
-- **Note deletion:** To consider full CRUD functionality for notes, the possibility to delete notes has been added.
-- **Dark theme:** To provide a better user experience, there was added a toggle button that changes the possibility to toggle the theme throughout the app.
-- **Sorting:** To be able to sort notes in every section, there was added the possibility to sort by date desc or asc.
-- **Hover description:** At the moment as requested the notes are just entitled with the format "Month-Day of the month" e.g. January 23. In order to provide a better visibility maintaining the same UI, a description of the full date (considering year) is displayed on hover.
-
+# 🚀 Endpoints
+For allowing the users to create and edit notes through the app, a series of different API endpoints have been created on the backend side, these endpoints allow the communication between the frontend (this repo) and he backend side of the app [You can see more about the different endpoints exposed in the backend here.](https://github.com/jchavezlavalle/notes_app_backend)
