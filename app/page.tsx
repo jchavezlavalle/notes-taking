@@ -23,17 +23,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (email === "test@test.com" && password === "1234") {
-      localStorage.setItem("loggedIn", "true");
-      router.push("/home");
-    } else {
-      alert("Invalid credentials");
-    }
-  };
-
   const createNewUser = async (user: User) => {
     try{
       await createUserAPI(user);
@@ -44,11 +33,10 @@ export default function LoginPage() {
   }
 
   const handleSignUp = async (email: string, password: string) => {
-    
     let exists = false;
 
     try{
-      const data = await getUserByEmailAPI(email);
+      const data = await getUserByEmailAPI(email);z
       exists = (data!== null);  
     } catch (e) {
       console.error("Failed to fetch notes count", e);
@@ -72,12 +60,11 @@ export default function LoginPage() {
           onClose={() => setShowModal(false)}
         />}
       {showErrorModal && <SuccessModal
-          message="You already have an account, please sign in."
+          message="You are already registered, please sign in."
           onClose={() => setShowErrorModal(false)}
         />}
 
       <form
-        onSubmit={handleLogin}
         className="flex flex-col gap-4 w-800"
       >
         <img 
@@ -134,7 +121,7 @@ export default function LoginPage() {
         </div>
 
         <button
-          type="submit"
+        type="button"
           onClick={() => handleSignUp(email, password)}
           style={{borderWidth:"1px", borderColor: "#957139"}}
           className="p-2 mt-6 rounded border-elements border rounded-l-full rounded-r-full font-bold w-[380px]"

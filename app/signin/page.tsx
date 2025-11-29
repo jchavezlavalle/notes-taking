@@ -6,6 +6,7 @@ import { config } from "../config";
 import { Inria_Serif } from "next/font/google";
 import Link from "next/link";
 import { getUserByEmailAPI } from "../services/usersApi";
+import SuccessModal from "../components/SuccessModal";
 
 const inria = Inria_Serif({
   subsets: ["latin"],
@@ -17,6 +18,8 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
 
   const handleLogin = async (email: string) => {
 
@@ -35,10 +38,20 @@ export default function SignInPage() {
     } else {
       alert("Invalid credentials");
     }
+
+    if (!exists){
+      setShowErrorModal(true);
+    } 
+
   };
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
+      
+      {showErrorModal && <SuccessModal
+          message="You are not registered, please return to sign up."
+          onClose={() => setShowErrorModal(false)}
+        />}
       <form
         className="flex flex-col gap-4 w-800"
       >
@@ -96,7 +109,7 @@ export default function SignInPage() {
         </div>
 
         <button
-          type="submit"
+          type="button"
           onClick={() => handleLogin(email)}
           style={{borderWidth:"1px", borderColor: "#957139"}}
           className="p-2 mt-6 rounded border-elements border rounded-l-full rounded-r-full font-bold w-[380px]"
